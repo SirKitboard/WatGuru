@@ -40,7 +40,7 @@ define([
 				var lectureRef = firebase.database().ref('courses/' + this.props.course.google_id+'/lecture');
 				var newWATRef = lectureRef.push();
 				newWATRef.set({
-					timestamp: Math.floor((new Date().getTime()) / 1000),
+					timestamp: Math.floor((new Date().getTime())),
 				});
 			}
 			this.setState({
