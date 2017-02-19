@@ -1,7 +1,10 @@
 define([
+	
 	"react",
 	"jsx!components/navbar",
-], function(React, NavBar) {
+	"jsx!components/class",
+	"helpers/api"
+], function(React, NavBar, Class, API) {
 	return React.createClass({
 		getInitialState: function() {
 			var user = firebase.auth().currentUser;
@@ -12,7 +15,9 @@ define([
 			}
 			return {
 				user: user,
-				database: firebase.database()
+				database: firebase.database(),
+				googleCourses: [],
+				firebaseCourses: []
 			}
 		},
 		componentDidMount: function() {
@@ -28,22 +33,33 @@ define([
 			var self = this;
 			if(!prevState.accessToken) {
 				if(this.state.accessToken) {
-					$.ajax({
-						method:"GET",
-						url: "https://classroom.googleapis.com/v1/courses?access_token=" + self.state.accessToken,
-						success: function(response) {
-							console.log(response)
-						}
-					})
-				}
+					API.getGoogleCourses(this.state.accessToken, this.initGoogleCourses);
+				}	
 			}
+		},
+		initGoogleCourses: function(Courses) {
+			this.setState({
+				googleCourses: Courses
+			});
+		},
+		initFirebaseCourses:function(Courses) {
+			this.setState({
+				firebaseCourses: Courses
+			});
 		},
 		gotoTab: function(e) {
 
 		},
 		render: function() {
 			return (
-				<NavBar user={this.state.user}/>
+				<div>
+					<NavBar user={this.state.user}/>
+					{
+						_.map(this.state.firebaseCourses, function(course) {
+
+						})
+					}
+				</div>
 			)
 		}
 	})
