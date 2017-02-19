@@ -153,6 +153,21 @@ def createCourse():
 	mysql.connection.commit()
 	return jsonify(result_dict)
 
+@app.route('/api/courses/enroll', methods=['POST'])
+def enrollStudent():
+	cursor = mysql.connection.cursor()
+	query = "SELECT * FROM courses where google_id='%s'"
+	cursor.execute(query % (request.form['google_id'],))
+	row = cursor.fetchone()
+	if(row):
+		course_id = row['id']
+		query = "INSERT IGNORE INTO users_courses(user_id, course_id) VALUES(%s, %s)"
+		cursor.execute(query % (request.form['user_id'], course_id))
+		mysql.connection.commit()
+		return "Woo"
+	else:
+		return "Nothing"
+
 
 if __name__ == '__main__':
 	import uuid

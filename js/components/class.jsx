@@ -7,18 +7,16 @@ define([
 		},
 		render: function() {
 			return (
-				<div className="row">
-					<div className="col s12 m6">
+					<div className="col s6 m4">
 					  <div className="card blue-grey darken-1">
 						<div className="card-content white-text">
 						  <span className="card-title">{this.props.course.name}</span>
 						</div>
 						<div className="card-action">
-						  <a href="#">Go to {this.props.course.name}</a>
+							{ this.props.course.active ? <a href="#">Go to {this.props.course.name}</a> : null}
 						</div>
 					  </div>
 					</div>
-				  </div>
 			)
 		}
 	})

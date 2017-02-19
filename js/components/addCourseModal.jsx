@@ -39,7 +39,8 @@ define([
 					owner_id: this.props.user.id
 				}, 
 				success:function(response) {
-
+					this.props.refreshCourses();
+					this.props.closeAddCourseModal();
 				}
 			})
 		},
