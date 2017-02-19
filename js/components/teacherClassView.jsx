@@ -27,20 +27,34 @@ define([
 				}
 			}, 10000)
 		},
+		reverseArr: function(input) {
+			var ret = new Array;
+			for(var i = input.length-1; i >= 0; i--) {
+				ret.push(input[i]);
+			}
+			return ret;
+		},
 		initializeListener: function(){
 			var self = this;
 			var lectureRef = firebase.database().ref('/courses/'+this.props.course.google_id+'/lecture')
 			this.setState({
 				lectureRef: lectureRef
 			});
-			lectureRef.orderByChild("timestamp").once('value', function(snapshot) {
-				_.each(snapshot.val(), function(value, key) {
-					self.state.wats.push({
-						timestamp: value.timestamp,
-						question: value.question
-					});
-					self.forceUpdate();
-				})
+			// lectureRef.orderByChild("timestamp").once('value', function(snapshot) {
+			// 	_.each(snapshot.val(), function(value, key) {
+			// 		self.state.wats.push({
+			// 			timestamp: value.timestamp,
+			// 			question: value.question
+			// 		});
+			// 		self.forceUpdate();
+			// 	})
+			// });
+			lectureRef.orderByChild("timestamp").on('child_added', function(snapshot) {
+				var value = snapshot.val();
+				self.state.wats.push({
+					timestamp: value.timestamp,
+					question: value.question
+				});
 			})
 		},
 		startLecture: function() {
@@ -98,7 +112,7 @@ define([
 							This course doesn't have an active lecture right now. Click the Start Lecture button to allow students to post their WATs to their Guru.
 						</p> : <ul className="live-feed z-depth-1">
 							{
-								_.map(self.state.wats.reverse(), function(wat){
+								_.map(self.reverseArr(self.state.wats), function(wat){
 									console.log(wat);
 									return (
 										<li>
@@ -123,7 +137,7 @@ define([
 				<div className="container">
 					<ul className="live-feed z-depth-1">
 							{
-								_.map(self.state.wats.reverse(), function(wat){
+								_.map(self.reverseArr(self.state.wats), function(wat){
 									console.log(wat);
 									return (
 										<li>
