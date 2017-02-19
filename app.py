@@ -29,13 +29,11 @@ APPLICATION_NAME = 'Classroom API Python Quickstart'
 PORT = os.environ.get("PORT")
 HOST = os.environ.get("HOST")
 FIREBASE_CONFIG = {
-	'apiKey: os.environ.get("FIREBASE_APIKEY")' # "AIzaSyDhOMbgtIFzMYcGq6nLHkWdyoZSAVHsQtU"
-	,
-	'authDomain: os.environ.get("FIREBASE_DOMAIN")' + ".firebaseapp.com",
-	'databaseURL: os.environ.get("FIREBASE_APIKEY")' #"https://oceanic-depth-138104.firebaseio.com"
-	,
-	'storageBucket: os.environ.get("FIREBASE_DOMAIN")' + ".appspot.com",
-	'messagingSenderId: os.environ.get("FIREBASE_SENDER_ID")'
+	'apiKey': os.environ.get("FIREBASE_APIKEY"),
+	'authDomain': os.environ.get("FIREBASE_DOMAIN") + ".firebaseapp.com",
+	'databaseURL': os.environ.get("FIREBASE_APIKEY"),
+	'storageBucket': os.environ.get("FIREBASE_DOMAIN") + ".appspot.com",
+	'messagingSenderId': os.environ.get("FIREBASE_SENDER_ID")
 }
 
 # @app.route('/')
@@ -58,14 +56,15 @@ def index():
 
 @app.route('/css/<path:path>')
 def send_css(path):
-	return Flask.send_from_directory('css', path)
+	return flask.send_from_directory('css', path)
 
 @app.route('/js/<path:path>')
 def send_js(path):
-	return Flask.send_from_directory('js', path)
+	return flask.send_from_directory('js', path)
 
 @app.route('/dashboard')
 def dashboard():
+	print(FIREBASE_CONFIG)
 	return flask.render_template('dashboard.html', firebase_config=FIREBASE_CONFIG)
 
 @app.route('/oauth2callback')

@@ -13,11 +13,11 @@
 		<script>
 		// Initialize Firebase
 		var config = {
-			apiKey: {{ firebase_config["apiKey"] }},
-			authDomain: {{ firebase_config["authDomain"] }},
-			databaseURL: {{ firebase_config["databaseURL"] }},
-			storageBucket: {{ firebase_config["storageBucket"] }},
-			messagingSenderId: {{ firebase_config["messagingSenderId"] }}
+			apiKey: "{{ firebase_config['apiKey'] }}",
+			authDomain: "{{ firebase_config['authDomain'] }}",
+			databaseURL: "{{ firebase_config['databaseURL'] }}",
+			storageBucket: "{{ firebase_config['storageBucket'] }}",
+			messagingSenderId: "{{ firebase_config['messagingSenderId'] }}"
 		};
 		firebase.initializeApp(config);
 		</script>
