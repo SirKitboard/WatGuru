@@ -1,10 +1,10 @@
 define([
-	
+	"underscore",
 	"react",
 	"jsx!components/navbar",
 	"jsx!components/class",
 	"helpers/api"
-], function(React, NavBar, Class, API) {
+], function(_, React, NavBar, Class, API) {
 	return React.createClass({
 		getInitialState: function() {
 			var user = firebase.auth().currentUser;
