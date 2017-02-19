@@ -40,7 +40,7 @@ FIREBASE_CONFIG = {
 # def hello_world():
 #     return 'Hello, World!'
 
-@app.route('/')
+@app.route('/api/classes')
 def index():
 	if 'credentials' not in flask.session:
 		return flask.redirect(flask.url_for('oauth2callback'))
@@ -66,6 +66,10 @@ def send_js(path):
 def dashboard():
 	print(FIREBASE_CONFIG)
 	return flask.render_template('dashboard.html', firebase_config=FIREBASE_CONFIG)
+
+@app.route('/')
+def login():
+    return flask.render_template('login.html', firebase_config=FIREBASE_CONFIG)
 
 @app.route('/oauth2callback')
 def oauth2callback():
