@@ -15,7 +15,7 @@ define([
 						<div className="nav-wrapper">
 							<a href="#!" className="brand-logo">WAT.guru</a>
 							<ul className="right hide-on-sm-and-down">
-								<li>Logged in as (email)</li>
+								<li>Logged in as {this.props.user.displayName}</li>
 								<li><a>Logout</a></li>
 							</ul>
 						</div>

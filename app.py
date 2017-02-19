@@ -31,7 +31,7 @@ HOST = os.environ.get("HOST")
 FIREBASE_CONFIG = {
 	'apiKey': os.environ.get("FIREBASE_APIKEY"),
 	'authDomain': os.environ.get("FIREBASE_DOMAIN") + ".firebaseapp.com",
-	'databaseURL': os.environ.get("FIREBASE_APIKEY"),
+	'databaseURL': os.environ.get("FIREBASE_DOMAIN") + ".firebaseio.com",
 	'storageBucket': os.environ.get("FIREBASE_DOMAIN") + ".appspot.com",
 	'messagingSenderId': os.environ.get("FIREBASE_SENDER_ID")
 }
@@ -68,6 +68,7 @@ def dashboard():
 	return flask.render_template('dashboard.html', firebase_config=FIREBASE_CONFIG)
 
 @app.route('/')
+@app.route('/login')
 def login():
     return flask.render_template('login.html', firebase_config=FIREBASE_CONFIG)
 

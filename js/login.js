@@ -7,16 +7,26 @@ $(document).ready(function(){
         var provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope('https://www.googleapis.com/auth/classroom.courses.readonly');
         firebase.auth().signInWithPopup(provider).then(function (result) {
+            
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = result.credential.accessToken;
+            debugger;
+            debugger;
             // The signed-in user info.
             var user = result.user;
-
-            console.log("Now changing to dashboard page");
-            window.location.href = "/dashboard";
+            firebase.database().ref('users/' + user.uid).set({
+                accessToken: token
+            }).then(function() {
+                debugger;
+                window.location.href = "/dashboard";
+            });
+            
         }).catch(function (error) {
+            
             // Handle Errors here.
             var errorCode = error.code;
+            debugger;
+            debugger;
             var errorMessage = error.message;
             // The email of the user's account used.
             var email = error.email;
