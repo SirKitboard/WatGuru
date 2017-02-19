@@ -9,6 +9,9 @@ define(["underscore"], function(_) {
 			},
 			error: function(jqXHR) {
 				console.log(jqXHR);
+				if(jqXHR.statusCode().status == 403) {
+					window.alert("This account does not have access to google classroom");
+				}
 			}
 		})
 	}

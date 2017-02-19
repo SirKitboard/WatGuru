@@ -17,12 +17,17 @@
     float: right; }
 
 .live-feed {
-  height: 600px;
+  height: 400px;
   overflow-y: scroll; }
   .live-feed li {
     padding: 5px;
     height: 60px;
     border-bottom: 1px solid #ccc; }
+    .live-feed li.end_of_list {
+      font-size: 10px;
+      color: #aaa;
+      text-align: center;
+      border-bottom: none; }
 
 .student-view.container {
   margin-top: 50px; }

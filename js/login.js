@@ -20,7 +20,6 @@ $(document).ready(function(){
                 },
                 success: function(response) {
                     console.log(response);
-                    debugger;
                     firebase.database().ref('users/' + user.uid).set({
                         id: response.id,
                         accessToken: token

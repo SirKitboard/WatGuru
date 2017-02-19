@@ -61,6 +61,7 @@ define([
 			firebase.database().ref('/courses/'+this.props.course.google_id).set({
 				active: true
 			});
+			this.initializeListener();
 			this.setState({
 				active: true
 			})
@@ -102,30 +103,32 @@ define([
 				return t.toLocaleDateString();
 			}
 		},
+		renderRow: function(wat){
+			var self = this;
+			return (
+				<li>
+					<div style={{float:'left', fontSize:'40px'}}>
+						😕: {wat.question ? wat.question : ""}
+					</div>
+					<div style={{float:'right'}}>
+						{ self.timeString(wat.timestamp) }
+					</div>
+				</li>
+			)
+		},
 		render: function() {
 			var self = this;
 			if(!this.state.active) {
 				return (
 					<div className="container" style={{marginTop: '30px'}}>
-						{!this.state.lecture ? 
+						{this.state.wats.length == 0 ? 
 						<p>
 							This course doesn't have an active lecture right now. Click the Start Lecture button to allow students to post their WATs to their Guru.
 						</p> : <ul className="live-feed z-depth-1">
 							{
-								_.map(self.reverseArr(self.state.wats), function(wat){
-									console.log(wat);
-									return (
-										<li>
-											<div style={{float:'left'}}>
-												WAT: {wat.question ? wat.question : ""}
-											</div>
-											<div style={{float:'right'}}>
-												self.timeString(wat.timestamp);
-											</div>
-										</li>
-									)
-								})
+								_.map(self.reverseArr(self.state.wats), self.renderRow)
 							}
+							<li className='end_of_list'>End Of List</li>
 						</ul> }
 						<button onClick={this.startLecture} className="btn btn-waves waves-green">
 							Start button
@@ -136,22 +139,11 @@ define([
 			return (
 				<div className="container">
 					<ul className="live-feed z-depth-1">
-							{
-								_.map(self.reverseArr(self.state.wats), function(wat){
-									console.log(wat);
-									return (
-										<li>
-											<div style={{float:'left'}}>
-												WAT: {wat.question ? wat.question : ""}
-											</div>
-											<div style={{float:'right'}}>
-												{self.timeString(wat.timestamp) };
-											</div>
-										</li>
-									)
-								})
-							}
-						</ul>
+						{
+							_.map(self.reverseArr(self.state.wats), self.renderRow)
+						}
+						<li className='end_of_list'>End Of List</li>
+					</ul>
 					<button onClick={this.endLecture} className="btn btn-waves waves-green">
 						End Lecture
 					</button>
