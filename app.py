@@ -1,5 +1,5 @@
 from __future__ import print_function
-from flask import Flask
+from flask import Flask, request
 import flask
 import httplib2
 import os
@@ -11,9 +11,21 @@ from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
+from flask_mysqldb import MySQL
+from flask import jsonify
 
 app = Flask(__name__)
 load_dotenv(find_dotenv())
+
+
+app.config['MYSQL_USER'] = os.environ.get("MYSQL_USER")
+app.config['MYSQL_PASSWORD'] = os.environ.get("MYSQL_PASSWORD")
+app.config['MYSQL_DB'] = os.environ.get("MYSQL_DB")
+app.config['MYSQL_HOST'] = os.environ.get("MYSQL_HOST")
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+mysql = MySQL()
+mysql.init_app(app)
      
 try:
     import argparse
@@ -52,7 +64,7 @@ def index():
 		service = discovery.build('classroom', 'v1', http=http_auth)
 		results = service.courses().list(pageSize=10).execute()
 		courses = results.get('courses', [])
-		return json.dumps(courses)
+		return jsonify(courses)
 
 @app.route('/css/<path:path>')
 def send_css(path):
@@ -91,6 +103,56 @@ def oauth2callback():
 		credentials = flow.step2_exchange(auth_code)
 		flask.session['credentials'] = credentials.to_json()
 		return flask.redirect(flask.url_for('index'))
+
+@app.route('/api/users', methods=['POST'])
+def getOrCreateUser():
+	cursor = mysql.connection.cursor()
+	query = "SELECT * FROM users where email='%s'"
+	cursor.execute(query % (request.form['email'],))
+	row = cursor.fetchone()
+	if row:
+		return jsonify(row)
+	else:
+		query = "INSERT INTO users(email) VALUES('%s')"
+		cursor.execute(query % (request.form['email'],))
+		mysql.connection.commit()
+		query = "SELECT * FROM users where email='%s'"
+		cursor.execute(query % (request.form['email'],))
+		row = cursor.fetchone()
+		return jsonify(row)
+
+@app.route('/api/courses', methods=['GET'])
+def getCourses():
+	cursor = mysql.connection.cursor()
+	if 'user_id' in request.args:
+		result_dict = {'student': [], 'teacher': []}
+		query = "SELECT * FROM courses where owner_id=%s"
+		cursor.execute(query % (request.args['user_id'],))
+		rows = cursor.fetchall()
+		for row in rows:
+			result_dict['teacher'].append(row)
+		
+		query = "select c.* from courses c join users_courses uc on uc.course_id = c.id where uc.user_id = %s";
+		cursor.execute(query % (request.args['user_id'],))
+		rows = cursor.fetchall()
+		for row in rows:
+			result_dict['student'].append(row)
+		
+		return jsonify(result_dict)
+
+@app.route('/api/courses', methods=['POST'])
+def createCourse():
+	cursor = mysql.connection.cursor()
+	result_dict = {}
+	query = "INSERT INTO courses(name, google_id, owner_id) VALUES('%s', '%s', %s)"
+	cursor.execute(query % (request.form['name'], request.form['google_id'], request.form['owner_id']))
+	mysql.connection.commit()
+	query = "SELECT * FROM courses where id=%s"
+	cursor.execute(query % (cursor.lastrowid,))
+	result_dict = cursor.fetchone()
+	mysql.connection.commit()
+	return jsonify(result_dict)
+
 
 if __name__ == '__main__':
 	import uuid

@@ -31,7 +31,7 @@ define([
 						</div>
 						<div className="nav-content">
 							<span className="nav-title">Classes</span>
-							<a className="btn-floating btn-large halfway-fab waves-effect waves-light cyan">
+							<a onClick={this.props.openAddCourseModal} className="btn-floating btn-large halfway-fab waves-effect waves-light cyan">
 								<i className="material-icons">add</i>
 							</a>
 						</div>

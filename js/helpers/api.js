@@ -14,8 +14,17 @@ define([], function() {
 		})
 	}
 
-	API.prototype.getFirebaseCourses = function() {
-		
+	API.prototype.getCoursesForUser = function(user_id, onSuccess) {
+		$.ajax({
+			method:"GET",
+			url: "/api/courses",
+			data: {
+				user_id: user_id
+			}, 
+			success: function(response) {
+				onSuccess(response);
+			}
+		})
 	}
 	return new API();
 });

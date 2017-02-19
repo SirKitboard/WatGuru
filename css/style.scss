@@ -8,3 +8,23 @@
 		}
 	} 
 }
+
+.course-list {
+	li {
+		width: 100%;
+		height: 60px;
+		border-top: 1px solid #aaa;
+		border-bottom: 1px solid #aaa;
+		margin:0;
+		padding: 10px;
+		
+		.course-name {
+			font-size: 30px;
+			float: left;
+		}
+
+		.btn {
+			float:right;
+		}
+	}
+}

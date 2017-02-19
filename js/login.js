@@ -12,11 +12,23 @@ $(document).ready(function(){
             var token = result.credential.accessToken;
             // The signed-in user info.
             var user = result.user;
-            firebase.database().ref('users/' + user.uid).set({
-                accessToken: token
-            }).then(function() {
-                window.location.href = "/dashboard";
-            });
+            $.ajax({
+                method: "POST",
+                url:"/api/users",
+                data: {
+                    email:user.email
+                },
+                success: function(response) {
+                    console.log(response);
+                    debugger;
+                    firebase.database().ref('users/' + user.uid).set({
+                        id: response.id,
+                        accessToken: token
+                    }).then(function() {
+                        window.location.href = "/dashboard";
+                    });
+                }
+            })
             
         }).catch(function (error) {
             
