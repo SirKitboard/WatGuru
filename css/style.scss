@@ -28,3 +28,28 @@
 		}
 	}
 }
+
+.live-feed {
+	height: 600px;
+	overflow-y: scroll;
+	li {
+		padding: 5px;
+		height:60px;
+		border-bottom: 1px solid #ccc;
+	}
+}
+
+.student-view {
+	&.container {
+		margin-top: 50px;
+	}
+	button {
+		display: block;
+		margin:auto;
+		line-height: 63px;
+		font-size: 50px;
+		text-align: center;
+		height: 170px;
+		border-radius: 200px;
+	}
+}

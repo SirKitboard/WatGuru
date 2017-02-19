@@ -4,9 +4,11 @@ define([
 	"jsx!components/navbar",
 	"jsx!components/class",
 	"jsx!components/addCourseModal",
+	"jsx!components/teacherClassView",
+	"jsx!components/studentClassView",
 	"helpers/api"
 
-], function(_, React, NavBar, Course, AddCourseModal, API) {
+], function(_, React, NavBar, Course, AddCourseModal, TeacherClassView, StudentClassView, API) {
 	return React.createClass({
 		getInitialState: function() {
 			var user = firebase.auth().currentUser;
@@ -37,6 +39,9 @@ define([
 					user: user
 				});
 			});
+			window.onhashchange = function() {
+				self.forceUpdate();
+			};
 		},
 		componentDidUpdate: function(prevProps, prevState) {
 			console.log(this.state.loading);
@@ -94,25 +99,33 @@ define([
 				firebaseCourses: courses
 			});
 		},
-		setCourseAsActive: function(google_id) {
-			var index = _.findIndex(this.state.courses.student, function(course) {
+		setCourseAsActive: function(google_id, isTeacher) {
+			var index = _.findIndex((isTeacher ? this.state.courses.teacher : this.state.courses.student), function(course) {
 				return course.google_id == google_id;
 			});
 			var courses = this.state.courses;
 			if(index != -1) {
-				courses.student[index].active = true;
+				if(isTeacher) {
+					courses.teacher[index].active = true;	
+				} else {
+					courses.student[index].active = true;
+				}
 				this.setState({
 					courses: courses
 				});
 			}
 		},
-		setCourseAsInactive: function(google_id) {
-			var index = _.findIndex(this.state.courses.student, function(course) {
+		setCourseAsInactive: function(google_id, isTeacher) {
+			var index = _.findIndex(isTeacher ? this.state.courses.teacher : this.state.courses.student , function(course) {
 				return course.google_id == google_id;
 			});
 			var courses = this.state.courses;
 			if(index != -1) {
-				courses.student[index].active = false;
+				if(isTeacher) {
+					courses.teacher[index].active = false;	
+				} else {
+					courses.student[index].active = false;
+				}
 				this.setState({
 					courses: courses
 				});
@@ -139,7 +152,9 @@ define([
 							active: false
 						});
 					} 
-					refs.push(firebase.database().ref('/courses/'+course.google_id).on('value', function(snapshot) {
+					var ref = firebase.database().ref('/courses/'+course.google_id);
+					refs.push(ref)
+					ref.on('value', function(snapshot) {
 						var val = snapshot.val()
 						console.log('val', val);
 						if(val) {
@@ -149,15 +164,43 @@ define([
 								self.setCourseAsInactive(course.google_id);
 							}
 						}
-					}));
+					});
+					self.setState({
+						databaseRefs:refs
+					});
+				});
+			});
+			_.each(this.state.courses.teacher, function(course) {
+				coursesRef.child(course.google_id).once('value', function(snapshot) {
+					if(!snapshot.val()) {
+						firebase.database().ref('/courses/'+course.google_id).set({
+							active: false
+						});
+					} 
+					var ref = firebase.database().ref('/courses/'+course.google_id);
+					refs.push(ref)
+					ref.on('value', function(snapshot) {
+						var val = snapshot.val()
+						console.log('val', val);
+						if(val) {
+							if(val.active) {
+								self.setCourseAsActive(course.google_id, true);
+							} else {
+								self.setCourseAsInactive(course.google_id, true);
+							}
+						}
+					});
 					self.setState({
 						databaseRefs:refs
 					});
 				});
 			});
 		},
-		gotoTab: function(e) {
-
+		gotoTeacherClass: function(classID) {
+			window.location.hash = "teacher/"+classID
+		},
+		gotoStudentClass: function(classID) {
+			window.location.hash = "student/"+classID
 		},
 		openAddCourseModal: function() {
 			 $('#addCourseModal').modal('open');
@@ -167,29 +210,48 @@ define([
 		},
 		render: function() {
 			// console.log(this.state);
-			console.log(this.state.databaseRefs);
+			console.log(this.state.courses);
+			var self = this;
+			var view = window.location.hash.split('/');
+			switch(view[0]) {
+				case "#teacher":
+					var course = _.find(this.state.courses.teacher, function(course) {
+						return course.google_id == view[1];
+					});
+					var view = <TeacherClassView course={course}/>
+				break;
+				case "#student":
+					var course = _.find(this.state.courses.student, function(course) {
+						return course.google_id == view[1];
+					});
+					var view = <StudentClassView course={course}/>
+				break;
+				default:
+					view = (
+						<div className="container">
+							<h3>Teaching</h3>
+							<div className="row">
+								{
+									_.map(this.state.courses.teacher, function(course) {
+										return <Course course={_.extend({active: true}, course)} gotoClass={self.gotoTeacherClass}/>
+									})
+								}
+							</div>
+							<h3>Enrolled</h3>
+							<div className="row">
+								{
+									_.map(this.state.courses.student, function(course) {
+										return <Course course={course} gotoClass={self.gotoStudentClass}/>
+									})
+								}
+							</div>
+						</div>
+					)
+			}
 			return (
 				<div>
 					<NavBar user={this.state.user} openAddCourseModal={this.openAddCourseModal}/>
-					<div className="container">
-						<h3>Teaching</h3>
-						<div className="row">
-							{
-								_.map(this.state.courses.teacher, function(course) {
-									course.active = true;
-									return <Course course={course}/>
-								})
-							}
-						</div>
-						<h3>Enrolled</h3>
-						<div className="row">
-							{
-								_.map(this.state.courses.student, function(course) {
-									return <Course course={course}/>
-								})
-							}
-						</div>
-					</div>
+					{view}
 					<AddCourseModal refreshCourses={this.refreshCourses} user={this.state.user} closeAddCourseModal={this.closeAddCourseModal} googleCourses={this.state.googleCourses} courses={this.state.courses}/>
 				</div>
 			)
