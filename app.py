@@ -3,14 +3,10 @@ from flask import Flask, request
 import flask
 import httplib2
 import os
-import json
-from os.path import join, dirname
-from dotenv import load_dotenv
 from dotenv import load_dotenv, find_dotenv
 from apiclient import discovery
 from oauth2client import client
 from oauth2client import tools
-from oauth2client.file import Storage
 from flask_mysqldb import MySQL
 from flask import jsonify
 

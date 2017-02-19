@@ -51,6 +51,7 @@ define([
 					allowWat: true
 				});
 			}, 5000);
+			ReactDOM.findDOMNode(this.refs.question).value = "";
 		},
 		render: function() {
 			if(!this.props.course.active) {
