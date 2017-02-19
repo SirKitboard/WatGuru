@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<!-- Compiled and minified CSS -->
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css"/>
+		<link rel="stylesheet" href="/css/style.css"/>
+	</head>
+	<body>
+		<div id="content">
+		</div>
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+		<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: {{ firebase_config.apiKey }},
+			authDomain: {{ firebase_config.authDomain }},
+			databaseURL: {{ firebase_config.databaseURL }},
+			storageBucket: {{ firebase_config.storageBucket }},
+			messagingSenderId: {{ firebase_config.messagingSenderId }}
+		};
+		firebase.initializeApp(config);
+		</script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+		<script src="/js/bower_components/requirejs/require.js"></script>
+		<!--<script type="text/javascript">
+			require(['/js/config.js'], function() {
+				require(['init_dashboard']);
+			})
+		</script>-->
+	</body>
+</html>
