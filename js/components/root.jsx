@@ -1,10 +1,14 @@
 define([
 	"react",
-], function(React) {
+	"jsx!components/navbar"
+], function(React, NavBar) {
 	return React.createClass({
+		gotoTab:function(e) {
+
+		},
 		render: function() {
 			return (
-				<h1>Hello</h1>
+				<NavBar/>
 			)
 		}
 	})

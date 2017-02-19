@@ -2,6 +2,7 @@
 .env
 .vscode
 client_secrets.json
+.sass-cache
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
