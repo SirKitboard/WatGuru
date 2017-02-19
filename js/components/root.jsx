@@ -233,7 +233,7 @@ define([
 							<div className="row">
 								{
 									_.map(this.state.courses.teacher, function(course) {
-										return <Course course={_.extend({active: true}, course)} gotoClass={self.gotoTeacherClass}/>
+										return <Course course={_.extend({active: true}, _.omit(course, 'active'))} gotoClass={self.gotoTeacherClass}/>
 									})
 								}
 							</div>
