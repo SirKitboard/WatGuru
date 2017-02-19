@@ -1,5 +1,5 @@
 require.config({
-	baseUrl: "/CSE332/hw2/js",
+	baseUrl: "js",
  	paths: {
                 "jquery": "https://code.jquery.com/jquery-2.1.1.min",
 	             "react": "//unpkg.com/react@15.3.2/dist/react-with-addons",

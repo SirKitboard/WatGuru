@@ -1,1 +1,11 @@
-// Do nothing for now
+define([
+	"react",
+], function(React) {
+	return React.createClass({
+		render: function() {
+			return (
+				<h1>Hello</h1>
+			)
+		}
+	})
+});
