@@ -17,19 +17,28 @@ define([
 		},
 		componentDidMount: function() {
 			var self = this;
-			$.ajax({
-				method:"GET",
-				url:"/",
-				success:function() {
-					debugger;
-				}
-			})
-			// window.setRootState();
-			// this.state.database.ref('/users/' + this.state.user.uid).on('value', function(snapshot) {
-			// 	debugger;
-			// });
+			this.state.database.ref('/users/' + this.state.user.uid).on('value', function(snapshot) {
+				console.log(snapshot.val())
+				self.setState({
+					accessToken: snapshot.val().accessToken
+				});
+			});
 		},
-		gotoTab:function(e) {
+		componentDidUpdate: function(prevProps, prevState) {
+			var self = this;
+			if(!prevState.accessToken) {
+				if(this.state.accessToken) {
+					$.ajax({
+						method:"GET",
+						url: "https://classroom.googleapis.com/v1/courses?access_token=" + self.state.accessToken,
+						success: function(response) {
+							console.log(response)
+						}
+					})
+				}
+			}
+		},
+		gotoTab: function(e) {
 
 		},
 		render: function() {

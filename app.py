@@ -72,6 +72,10 @@ def dashboard():
 def login():
     return flask.render_template('login.html', firebase_config=FIREBASE_CONFIG)
 
+@app.route('/test')
+def test():
+    return flask.render_template('test.html', firebase_config=FIREBASE_CONFIG)
+
 @app.route('/oauth2callback')
 def oauth2callback():
 	flow = client.flow_from_clientsecrets(

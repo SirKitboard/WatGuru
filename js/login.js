@@ -10,14 +10,11 @@ $(document).ready(function(){
             
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = result.credential.accessToken;
-            debugger;
-            debugger;
             // The signed-in user info.
             var user = result.user;
             firebase.database().ref('users/' + user.uid).set({
                 accessToken: token
             }).then(function() {
-                debugger;
                 window.location.href = "/dashboard";
             });
             
@@ -25,8 +22,6 @@ $(document).ready(function(){
             
             // Handle Errors here.
             var errorCode = error.code;
-            debugger;
-            debugger;
             var errorMessage = error.message;
             // The email of the user's account used.
             var email = error.email;

@@ -9,7 +9,8 @@ require.config({
                   "text": "//cdn.rawgit.com/philix/jsx-requirejs-plugin/master/js/text",
 	        "underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min",
 			   "require":"//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min",
-			  "firebase": "//www.gstatic.com/firebasejs/3.6.9/firebase"
+			  "firebase": "//www.gstatic.com/firebasejs/3.6.9/firebase",
+			  'gapi': '//apis.google.com/js/api'
 
  	},
  	jsx: {

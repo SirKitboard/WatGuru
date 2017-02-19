@@ -13,6 +13,17 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
 		<script type="text/javascript">
 			require(['/js/config.js'], function() {
+				require(['firebase'], function() {
+					// Initialize Firebase
+					var config = {
+						apiKey: "{{ firebase_config['apiKey'] }}",
+						authDomain: "{{ firebase_config['authDomain'] }}",
+						databaseURL: "{{ firebase_config['databaseURL'] }}",
+						storageBucket: "{{ firebase_config['storageBucket'] }}",
+						messagingSenderId: "{{ firebase_config['messagingSenderId'] }}"
+					};
+					firebase.initializeApp(config);
+				});
 				require(['init_dashboard']);
 			})
 		</script>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+		<script>
+		// Initialize Firebase
+        var config = {
+			apiKey: "{{ firebase_config['apiKey'] }}",
+			authDomain: "{{ firebase_config['authDomain'] }}",
+			databaseURL: "{{ firebase_config['databaseURL'] }}",
+			storageBucket: "{{ firebase_config['storageBucket'] }}",
+			messagingSenderId: "{{ firebase_config['messagingSenderId'] }}"
+		};
+		firebase.initializeApp(config);
+		</script>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-cyan.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+
+    <title>Login</title>
+</head>
+<body>
+
+
+<h2>Welcome to Wat Guru</h2>
+
+<button id="login_button">Login</button>
+<script type="text/javascript">
+	/**
+ * Created by Nomi on 2/18/2017.
+ */
+$("#login_button").on('click', function(){
+	console.log('fuckhi');
+    var something = 'hello';
+	$.ajax({
+		method:"GET",
+		url:"/",
+		success: function() {
+			// console.log(something);
+			debugger;
+		}
+	})
+});
+</script>
+<script>
+	console.log('hi');
+	// debugger;
+</script>
+</body>
+</html>
