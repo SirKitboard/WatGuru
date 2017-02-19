@@ -4,7 +4,8 @@ define([
 	"jsx!components/navbar",
 	"jsx!components/class",
 	"helpers/api"
-], function(_, React, NavBar, Class, API) {
+
+], function(_, React, NavBar, Course, API) {
 	return React.createClass({
 		getInitialState: function() {
 			var user = firebase.auth().currentUser;
@@ -56,7 +57,7 @@ define([
 					<NavBar user={this.state.user}/>
 					{
 						_.map(this.state.firebaseCourses, function(course) {
-
+							return <Course course={course}/>
 						})
 					}
 				</div>

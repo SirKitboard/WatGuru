@@ -8,6 +8,16 @@ define([
 		capitalizeFirstLetter: function(string) {
 			return string.charAt(0).toUpperCase() + string.slice(1);
 		},
+		logoutHandler: function(){
+				firebase.auth().signOut().then(function() {
+				  // Sign-out successful.
+					console.log("Logged out user, going back to login page");
+					window.location.href = '/';
+				}, function(error) {
+				  // An error happened.
+					console.log("Error in logging out user");
+				});
+		},
 		render: function() {
 			return (
 				<div className="nav-container">
@@ -16,7 +26,7 @@ define([
 							<a href="#!" className="brand-logo">WAT.guru</a>
 							<ul className="right hide-on-sm-and-down">
 								<li>Logged in as {this.props.user.displayName}</li>
-								<li><a>Logout</a></li>
+								<li><a onClick={this.logoutHandler}>Logout</a></li>
 							</ul>
 						</div>
 						<div className="nav-content">
